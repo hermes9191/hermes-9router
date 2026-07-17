@@ -13,7 +13,8 @@ RUN apk --no-cache upgrade && \
     rm -rf /var/cache/apk/*
 
 COPY package.json package-lock.json* ./
-RUN --mount=type=cache,target=/root/.npm \
+# اضافه شدن id=npm_cache برای حل مشکل ریلیوی و داکر
+RUN --mount=type=cache,id=npm_cache,target=/root/.npm \
     npm install --omit=dev
 
 COPY . ./
@@ -24,7 +25,6 @@ RUN npm run build
 FROM ${NODE_IMAGE} AS runner
 WORKDIR /app
 
-# حذف متغیر ثابت PORT تا Railway پورت خودش را به برنامه تزریق کند
 ENV NODE_ENV=production \
     HOSTNAME=0.0.0.0 \
     NEXT_TELEMETRY_DISABLED=1 \
