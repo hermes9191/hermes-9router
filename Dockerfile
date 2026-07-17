@@ -13,9 +13,8 @@ RUN apk --no-cache upgrade && \
     rm -rf /var/cache/apk/*
 
 COPY package.json package-lock.json* ./
-# اضافه شدن id=npm_cache برای حل مشکل ریلیوی و داکر
-RUN --mount=type=cache,id=npm_cache,target=/root/.npm \
-    npm install --omit=dev
+# حذف کامل قابلیت ماونت و استفاده از دستور استاندارد و ساده لینوکس
+RUN npm install --omit=dev
 
 COPY . ./
 ENV NEXT_TELEMETRY_DISABLED=1
