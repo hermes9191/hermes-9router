@@ -2,7 +2,7 @@
 # =============================================================
 #  9Router — Railway entrypoint
 # =============================================================
-set -e
+# DO NOT set -e — a crash must not kill the container (Railway 502)
 
 echo "══════════════════════════════════════════"
 echo "  9Router — Railway Start"
