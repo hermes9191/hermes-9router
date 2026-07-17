@@ -1,6 +1,5 @@
 # syntax=docker/dockerfile:1.7
 # 9Router — Railway-optimized Dockerfile
-# Based on decolua/9router:master with Railway-specific tweaks
 
 ARG NODE_IMAGE=node:22-alpine
 FROM ${NODE_IMAGE} AS base
@@ -25,8 +24,8 @@ RUN npm run build
 FROM ${NODE_IMAGE} AS runner
 WORKDIR /app
 
+# حذف متغیر ثابت PORT تا Railway پورت خودش را به برنامه تزریق کند
 ENV NODE_ENV=production \
-    PORT=20128 \
     HOSTNAME=0.0.0.0 \
     NEXT_TELEMETRY_DISABLED=1 \
     DATA_DIR=/app/data
@@ -50,8 +49,6 @@ RUN mkdir -p /app/data /app/data-home && \
 RUN apk --no-cache add su-exec && \
     printf '#!/bin/sh\nchown -R node:node /app/data /app/data-home 2>/dev/null\nexec su-exec node "$@"\n' > /entrypoint.sh && \
     chmod +x /entrypoint.sh
-
-EXPOSE 20128
 
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["node", "custom-server.js"]
